@@ -18,15 +18,18 @@ The goal is to keep Fusion, lobby/session capacity, player records, streaming st
 
 ## Project structure
 
-- `Plugin.cs` – BepInEx plugin entry point and Harmony patch installation
-- `PlayerLimits.cs` – central player capacity constants and detection logic
-- `FusionConfigPatch.cs` – adjusts Fusion default player count
-- `SteamLobbyPatch.cs` – adjusts Steam lobby max player count
-- `PhotonRoomPatch.cs` – adjusts Photon room max player count
-- `PlayerManagerCapacityPatch.cs` – expands player array capacity safely
-- `NetworkStreamingCapacityPatch.cs` – expands streaming payload capacity and initializes new slots
-- `NetworkLinkSpawnGuardPatch.cs` – defers spawn-race exceptions instead of crashing
-- `PlayerNetworkColourFixPatch.cs` – restores colors for extra players when ASKA returns invalid/default values
+The C# source files now live under the standard SDK layout:
+
+- `src/PlayerCapacityPatch/` – project source files and project definition
+  - `Plugin.cs` – BepInEx plugin entry point and Harmony patch installation
+  - `PlayerLimits.cs` – central player capacity constants and detection logic
+  - `FusionConfigPatch.cs` – adjusts Fusion default player count
+  - `SteamLobbyPatch.cs` – adjusts Steam lobby max player count
+  - `PhotonRoomPatch.cs` – adjusts Photon room max player count
+  - `PlayerManagerCapacityPatch.cs` – expands player array capacity safely
+  - `NetworkStreamingCapacityPatch.cs` – expands streaming payload capacity and initializes new slots
+  - `NetworkLinkSpawnGuardPatch.cs` – defers spawn-race exceptions instead of crashing
+  - `PlayerNetworkColourFixPatch.cs` – restores colors for extra players when ASKA returns invalid/default values
 
 ## Build
 
