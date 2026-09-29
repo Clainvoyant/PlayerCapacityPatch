@@ -1,0 +1,102 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <AssemblyName>PlayerCapacityPatch</AssemblyName>
+    <RootNamespace>PlayerCapacityPatch</RootNamespace>
+    <LangVersion>latest</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <AskaDir>/home/abaddon/games1/SteamLibrary/steamapps/common/ASKA</AskaDir>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- BepInEx -->
+    <Reference Include="BepInEx.Core">
+      <HintPath>$(AskaDir)/BepInEx/core/BepInEx.Core.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+
+    <Reference Include="BepInEx.Unity.Common">
+      <HintPath>$(AskaDir)/BepInEx/core/BepInEx.Unity.Common.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+
+    <Reference Include="BepInEx.Unity.IL2CPP">
+      <HintPath>$(AskaDir)/BepInEx/core/BepInEx.Unity.IL2CPP.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+
+    <Reference Include="Il2CppInterop.Runtime">
+      <HintPath>$(AskaDir)/BepInEx/core/Il2CppInterop.Runtime.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+
+    <!-- Harmony -->
+    <Reference Include="0Harmony">
+      <HintPath>$(AskaDir)/BepInEx/core/0Harmony.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+
+    <!-- Generated IL2CPP assemblies -->
+    <Reference Include="Il2Cppmscorlib">
+      <HintPath>$(AskaDir)/BepInEx/interop/Il2Cppmscorlib.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+
+    <Reference Include="UnityEngine">
+      <HintPath>$(AskaDir)/BepInEx/interop/UnityEngine.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>$(AskaDir)/BepInEx/interop/UnityEngine.CoreModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+
+    <!-- ASKA itself -->
+    <Reference Include="Assembly-CSharp">
+      <HintPath>$(AskaDir)/BepInEx/interop/Assembly-CSharp.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+
+    <Reference Include="Fusion.Runtime">
+      <HintPath>$(AskaDir)/BepInEx/interop/Fusion.Runtime.dll</HintPath>
+      <Private>false</Private>
+    </Reference>    
+
+    <Reference Include="SandSailorStudio">
+      <HintPath>$(AskaDir)/BepInEx/interop/SandSailorStudio.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+
+    <Reference Include="com.rlabrecque.steamworks.net">
+      <HintPath>$(AskaDir)/BepInEx/interop/com.rlabrecque.steamworks.net.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+
+    <Reference Include="Fusion.Realtime">
+      <HintPath>$(AskaDir)/BepInEx/interop/Fusion.Realtime.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+
+    <Reference Include="PhotonRealtime">
+      <HintPath>$(AskaDir)/BepInEx/interop/PhotonRealtime.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+
+    <Reference Include="Unity.TextMeshPro">
+      <HintPath>/home/abaddon/games1/SteamLibrary/steamapps/common/ASKA/BepInEx/interop/Unity.TextMeshPro.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+
+    <Reference Include="UnityEngine.UI">
+      <HintPath>/home/abaddon/games1/SteamLibrary/steamapps/common/ASKA/BepInEx/interop/UnityEngine.UI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+
+  </ItemGroup>
+
+</Project>
