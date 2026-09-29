@@ -33,7 +33,7 @@ The goal is to keep Fusion, lobby/session capacity, player records, streaming st
 This project targets .NET 6 and references ASKA/BepInEx assemblies from the local install path defined in the project file.
 
 ```bash
-dotnet build PlayerCapacityPatch.csproj -nologo
+dotnet build -c Release
 ```
 
 ## Install
