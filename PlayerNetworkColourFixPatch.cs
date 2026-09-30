@@ -1,176 +1,3 @@
-//using Fusion;
-//using HarmonyLib;
-//using SSSGame;
-//using UnityEngine;
-//
-//namespace PlayerCapacityPatch;
-//
-//
-//// If ASKA returns transparent black for a network colour,
-//// fall back to its own colour ID and colour table.
-//[HarmonyPatch(
-//    typeof(PlayerCharacter),
-//    nameof(PlayerCharacter.GetNetworkColor)
-//)]
-//internal static class PlayerNetworkColourFixPatch
-//{
-//    [HarmonyPostfix]
-//    private static void Postfix(
-//        PlayerCharacter __instance,
-//        ref Color __result
-//    )
-//    {
-//        // ASKA returned a valid colour.
-//        if (__result.a > 0.001f)
-//        {
-//            return;
-//        }
-//
-//        var table =
-//            __instance.networkColorTable;
-//
-//        if (table == null)
-//        {
-//            return;
-//        }
-//
-//        int colourId =
-//            __instance._GetNetworkColorID();
-//
-//        if (
-//            colourId < 0 ||
-//            colourId >= table.ColorsCount
-//        )
-//        {
-//            return;
-//        }
-//
-//        int tableIndex =
-//            colourId;
-//
-//        __result =
-//            table.GetColorAtIndex(
-//                ref tableIndex
-//            );
-//    }
-//}
-//
-//
-//// On affected clients GetNetworkColor() can now return
-//// correctly, but PlayerManager.Player.color remains clear.
-//// Copy the repaired colour into the PlayerManager record.
-//[HarmonyPatch(
-//    typeof(PlayerManager),
-//    nameof(PlayerManager.SetPlayer),
-//    new[]
-//    {
-//        typeof(PlayerRef),
-//        typeof(NetworkObject)
-//    }
-//)]
-//internal static class PlayerManagerColourFixPatch
-//{
-//    [HarmonyPostfix]
-//    private static void Postfix(
-//        PlayerManager __instance,
-//        PlayerRef reference
-//    )
-//    {
-//        if (__instance._players == null)
-//        {
-//            return;
-//        }
-//
-//        for (
-//            int i = 0;
-//            i < __instance._players.Length;
-//            i++
-//        )
-//        {
-//            var entry =
-//                __instance._players[i];
-//
-//            if (entry == null)
-//            {
-//                continue;
-//            }
-//
-//            if (entry.reference != reference)
-//            {
-//                continue;
-//            }
-//
-//            if (entry.playerObject == null)
-//            {
-//                return;
-//            }
-//
-//            // Already initialized correctly.
-//            if (entry.color.a > 0.001f)
-//            {
-//                return;
-//            }
-//
-//            var character =
-//                entry.playerObject
-//                    .GetComponent<PlayerCharacter>();
-//
-//            if (character == null)
-//            {
-//                return;
-//            }
-//
-//            Color networkColour =
-//                character.GetNetworkColor();
-//
-//            if (networkColour.a <= 0.001f)
-//            {
-//                return;
-//            }
-//
-//entry.color =
-//    networkColour;
-//
-//var helper =
-//    character.networkColorHelper;
-//
-//if (helper != null)
-//{
-//    var materialColour =
-//        networkColour;
-//
-//    helper.SetColor(
-//        ref materialColour
-//    );
-//
-//    Plugin.Log.LogInfo(
-//        $"Player visual colour reapplied: " +
-//        $"slot={i}, " +
-//        $"ref={reference}, " +
-//        $"colour=(" +
-//        $"{materialColour.r:F3}," +
-//        $"{materialColour.g:F3}," +
-//        $"{materialColour.b:F3}," +
-//        $"{materialColour.a:F3})"
-//    );
-//}
-//
-//            Plugin.Log.LogInfo(
-//                $"Player colour repaired: " +
-//                $"slot={i}, " +
-//                $"ref={reference}, " +
-//                $"colour=(" +
-//                $"{networkColour.r:F3}," +
-//                $"{networkColour.g:F3}," +
-//                $"{networkColour.b:F3}," +
-//                $"{networkColour.a:F3})"
-//            );
-//
-//            return;
-//        }
-//    }
-//}
-
 using HarmonyLib;
 using SSSGame;
 using UnityEngine;
@@ -197,6 +24,22 @@ internal static class PlayerColours
         new(1.00f, 0.65f, 0.00f, 1.00f), // 13 Gold
         new(0.35f, 1.00f, 0.70f, 1.00f), // 14 Mint
         new(0.75f, 0.50f, 0.25f, 1.00f), // 15 Brown
+        new(0.95f, 0.10f, 0.10f, 1.00f), // 16 Crimson
+        new(0.10f, 0.35f, 0.95f, 1.00f), // 17 Royal Blue
+        new(0.95f, 0.85f, 0.10f, 1.00f), // 18 Lemon
+        new(0.10f, 0.75f, 0.20f, 1.00f), // 19 Emerald
+        new(0.95f, 0.10f, 0.85f, 1.00f), // 20 Fuchsia
+        new(0.10f, 0.80f, 0.85f, 1.00f), // 21 Turquoise
+        new(0.95f, 0.55f, 0.35f, 1.00f), // 22 Salmon
+        new(0.45f, 0.20f, 0.10f, 1.00f), // 23 Umber
+        new(0.45f, 0.95f, 0.95f, 1.00f), // 24 Ice
+        new(0.55f, 0.10f, 0.25f, 1.00f), // 25 Wine
+        new(0.35f, 0.45f, 0.10f, 1.00f), // 26 Olive
+        new(0.40f, 0.25f, 0.85f, 1.00f), // 27 Indigo
+        new(0.90f, 0.40f, 0.65f, 1.00f), // 28 Rose
+        new(0.55f, 0.55f, 0.60f, 1.00f), // 29 Silver
+        new(0.15f, 0.15f, 0.20f, 1.00f), // 30 Charcoal
+        new(0.85f, 0.85f, 0.80f, 1.00f), // 31 Ivory
     };
 
     internal static void BindExtraColourConfig(
@@ -208,7 +51,7 @@ internal static class PlayerColours
             var defaultColour = ExtraColours[i];
             string defaultValue = FormatColour(defaultColour);
             string description = i == 0
-                ? "Color for network color ID 4 (Magenta). Use #RRGGBB or #RRGGBBAA, or normalized R,G,B[,A] values from 0 to 1."
+                ? "Color for network color ID 4 (Magenta). Player5 through Player32 map to IDs 4 through 31. Use #RRGGBB or #RRGGBBAA, or normalized R,G,B[,A] values from 0 to 1."
                 : string.Empty;
 
             var entry = config.Bind(

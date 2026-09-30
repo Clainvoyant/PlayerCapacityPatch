@@ -5,7 +5,21 @@ namespace PlayerCapacityPatch;
 
 internal static class PlayerLimits
 {
-    internal const int MaxHumanPlayers = 16;
+    internal const int DefaultMaxHumanPlayers = 16;
+    internal const int MinimumMaxHumanPlayers = 4;
+    internal const int MaximumMaxHumanPlayers = 32;
+
+    internal static int MaxHumanPlayers { get; private set; } =
+        DefaultMaxHumanPlayers;
+
+    internal static void SetMaxHumanPlayers(int value)
+    {
+        MaxHumanPlayers = Math.Clamp(
+            value,
+            MinimumMaxHumanPlayers,
+            MaximumMaxHumanPlayers
+        );
+    }
 
     // ASKA internally needs one extra Player record.
     internal static int PlayerManagerCapacity =>
