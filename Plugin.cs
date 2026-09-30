@@ -5,9 +5,9 @@ using HarmonyLib;
 namespace PlayerCapacityPatch;
 
 [BepInPlugin(
-    "com.abaddon.aska.testmod",
-    "ASKA Test Mod",
-    "0.2.0"
+    "clainvoyant.playercapacitypatch",
+    "Player Capacity Patch",
+    "1.0.0"
 )]
 public class Plugin : BasePlugin
 {
@@ -16,10 +16,11 @@ public class Plugin : BasePlugin
     public override void Load()
     {
         Log = base.Log;
+        PlayerColours.BindExtraColourConfig(Config);
 
-        Log.LogInfo("ASKA Test Mod loading...");
+        Log.LogInfo("Player Capacity Patch loading...");
 
-        var harmony = new Harmony("com.abaddon.aska.testmod");
+        var harmony = new Harmony("clainvoyant.playercapacitypatch");
         harmony.PatchAll();
 
         Log.LogInfo("Harmony patches installed.");
