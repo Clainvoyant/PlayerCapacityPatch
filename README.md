@@ -18,8 +18,6 @@ The goal is to keep Fusion, lobby/session capacity, player records, streaming st
 
 ## Project structure
 
-This project keeps the C# files in the project root, which is a normal and simple layout for a small SDK-style mod project.
-
 - `Plugin.cs` – BepInEx plugin entry point and Harmony patch installation
 - `PlayerLimits.cs` – central player capacity constants and detection logic
 - `FusionConfigPatch.cs` – adjusts Fusion default player count
