@@ -54,3 +54,5 @@ This project is experimental and intentionally patches private runtime state. It
 ## Extra player waypoint colors
 
 ASKA's native waypoint initialization reads colors through `ColorTableConfig.TryGetColor`, which falls back to white when a player color ID is outside the four-entry `PlayerNetworkColors` table. The patch supplies the extra palette for actual player color IDs 4 through 15 in that lookup, so a real fifth player's map icon uses the defined magenta color instead of white. Normal IDs and the local player's identity are not rewritten; single-player IDs 0 through 3 continue through ASKA's original lookup.
+
+Each extra slot can be overridden in the BepInEx config under `[ExtraPlayerColors]` (`Player5` through `Player16`). Values accept `#RRGGBB`, `#RRGGBBAA`, or normalized comma-separated channels such as `1.0,0.2,0.65,1.0`. Defaults preserve the current palette. Color IDs are networked, but RGB values are resolved locally, so different client configs will not break the session; they can make clients see different colors for the same player.

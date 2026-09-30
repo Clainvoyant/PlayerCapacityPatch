@@ -176,6 +176,8 @@ using SSSGame;
 using UnityEngine;
 using Fusion;
 using SandSailorStudio.Utils;
+using BepInEx.Configuration;
+using System.Globalization;
 
 namespace PlayerCapacityPatch;
 
@@ -196,6 +198,39 @@ internal static class PlayerColours
         new(0.35f, 1.00f, 0.70f, 1.00f), // 14 Mint
         new(0.75f, 0.50f, 0.25f, 1.00f), // 15 Brown
     };
+
+    internal static void BindExtraColourConfig(
+        ConfigFile config
+    )
+    {
+        for (int i = 0; i < ExtraColours.Length; i++)
+        {
+            var defaultColour = ExtraColours[i];
+            string defaultValue = FormatColour(defaultColour);
+            string description = i == 0
+                ? "Color for network color ID 4 (Magenta). Use #RRGGBB or #RRGGBBAA, or normalized R,G,B[,A] values from 0 to 1."
+                : string.Empty;
+
+            var entry = config.Bind(
+                "ExtraPlayerColors",
+                $"Player{i + 5}",
+                defaultValue,
+                description
+            );
+
+            if (TryParseColour(entry.Value, out Color configuredColour))
+            {
+                ExtraColours[i] = configuredColour;
+            }
+            else
+            {
+                Plugin.Log.LogWarning(
+                    $"Invalid ExtraPlayerColors.Player{i + 5} value " +
+                    $"'{entry.Value}', keeping default {defaultValue}."
+                );
+            }
+        }
+    }
 
     internal static Color GetColour(
         PlayerCharacter character
@@ -240,6 +275,71 @@ internal static class PlayerColours
 
         colour = default;
         return false;
+    }
+
+    private static string FormatColour(Color colour)
+    {
+        return string.Join(
+            ",",
+            colour.r.ToString("F2", CultureInfo.InvariantCulture),
+            colour.g.ToString("F2", CultureInfo.InvariantCulture),
+            colour.b.ToString("F2", CultureInfo.InvariantCulture),
+            colour.a.ToString("F2", CultureInfo.InvariantCulture)
+        );
+    }
+
+    private static bool TryParseColour(
+        string value,
+        out Color colour
+    )
+    {
+        colour = default;
+
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return false;
+        }
+
+        value = value.Trim();
+        if (ColorUtility.TryParseHtmlString(value, out colour))
+        {
+            return true;
+        }
+
+        string[] components = value.Split(',');
+        if (components.Length < 3 || components.Length > 4)
+        {
+            return false;
+        }
+
+        var channels = new float[components.Length];
+        for (int i = 0; i < components.Length; i++)
+        {
+            if (
+                !float.TryParse(
+                    components[i].Trim(),
+                    NumberStyles.Float,
+                    CultureInfo.InvariantCulture,
+                    out channels[i]
+                ) ||
+                float.IsNaN(channels[i]) ||
+                float.IsInfinity(channels[i]) ||
+                channels[i] < 0f ||
+                channels[i] > 1f
+            )
+            {
+                return false;
+            }
+        }
+
+        colour = new Color(
+            channels[0],
+            channels[1],
+            channels[2],
+            components.Length == 4 ? channels[3] : 1f
+        );
+
+        return true;
     }
 }
 
