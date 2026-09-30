@@ -50,3 +50,7 @@ Typical workflow:
 ## Notes
 
 This project is experimental and intentionally patches private runtime state. It is designed for ASKA compatibility work and runtime diagnostics while testing higher-capacity multiplayer behavior.
+
+## Extra player waypoint colors
+
+ASKA's native waypoint initialization reads colors through `ColorTableConfig.TryGetColor`, which falls back to white when a player color ID is outside the four-entry `PlayerNetworkColors` table. The patch supplies the extra palette for actual player color IDs 4 through 15 in that lookup, so a real fifth player's map icon uses the defined magenta color instead of white. Normal IDs and the local player's identity are not rewritten; single-player IDs 0 through 3 continue through ASKA's original lookup.

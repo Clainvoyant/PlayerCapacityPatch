@@ -175,6 +175,7 @@ using HarmonyLib;
 using SSSGame;
 using UnityEngine;
 using Fusion;
+using SandSailorStudio.Utils;
 
 namespace PlayerCapacityPatch;
 
@@ -182,7 +183,7 @@ internal static class PlayerColours
 {
     internal static readonly Color[] ExtraColours =
     {
-        new(1.00f, 0.20f, 0.65f, 1.00f), // 4  Pink
+        new(1.00f, 0.20f, 0.65f, 1.00f), // 4  Magenta
         new(0.00f, 0.90f, 1.00f, 1.00f), // 5  Cyan
         new(1.00f, 0.45f, 0.05f, 1.00f), // 6  Orange
         new(0.65f, 0.25f, 1.00f, 1.00f), // 7  Purple
@@ -217,18 +218,68 @@ internal static class PlayerColours
         }
 
         // Our additional player colours.
-        int extraIndex =
-            id - 4;
-
-        if (
-            extraIndex >= 0 &&
-            extraIndex < ExtraColours.Length
-        )
+        if (TryGetExtraColour(id, out Color extraColour))
         {
-            return ExtraColours[extraIndex];
+            return extraColour;
         }
 
         return Color.white;
+    }
+
+    internal static bool TryGetExtraColour(
+        int id,
+        out Color colour
+    )
+    {
+        int extraIndex = id - 4;
+        if (extraIndex >= 0 && extraIndex < ExtraColours.Length)
+        {
+            colour = ExtraColours[extraIndex];
+            return true;
+        }
+
+        colour = default;
+        return false;
+    }
+}
+
+[HarmonyPatch(
+    typeof(ColorTableConfig),
+    nameof(ColorTableConfig.TryGetColor)
+)]
+internal static class PlayerNetworkColorTablePatch
+{
+    [HarmonyPrefix]
+    private static bool Prefix(
+        ColorTableConfig __instance,
+        ref int index,
+        ref Color color,
+        ref bool __result
+    )
+    {
+        if (__instance == null || __instance.name != "PlayerNetworkColors")
+        {
+            return true;
+        }
+
+        if (
+            index < __instance.ColorsCount ||
+            !PlayerColours.TryGetExtraColour(index, out Color extraColour)
+        )
+        {
+            return true;
+        }
+
+        color = extraColour;
+        __result = true;
+
+        Plugin.Log.LogInfo(
+            $"Extra network color lookup: " +
+            $"table={__instance.name}, id={index}, " +
+            $"color=({color.r:F3},{color.g:F3},{color.b:F3},{color.a:F3})"
+        );
+
+        return false;
     }
 }
 
